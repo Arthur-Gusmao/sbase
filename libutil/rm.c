@@ -19,7 +19,7 @@ rm(int dirfd, const char *name, struct stat *st, void *data, struct recursor *r)
 	ignore = r->flags & IGNORE;
 	quiet = r->flags & SILENT;
 	ask = r->flags & CONFIRM;
-	write = faccessat(dirfd, name, W_OK, 0) == 0;
+	write = S_ISLNK(st->st_mode) || faccessat(dirfd, name, W_OK, 0) == 0;
 	flags = 0;
 
 	if (S_ISDIR(st->st_mode) && r->maxdepth) {
