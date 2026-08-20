@@ -2,11 +2,11 @@
 VERSION = 0.1
 
 # paths
-PREFIX = /usr/local
-MANPREFIX = $(PREFIX)/share/man
+PREFIX = /bin
+MANPREFIX = /share/man
 
 # tools
-#CC =
+CC = clang
 #AR =
 RANLIB = ranlib
 # OpenBSD requires SMAKE to be scripts/make
@@ -15,5 +15,5 @@ SMAKE = $(MAKE)
 
 # -lrt might be needed on some systems
 # -DYYDEBUG adds more debug info when yacc is involved
-# CFLAGS   =
+CFLAGS   = -static
 # LDFLAGS  =
