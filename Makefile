@@ -189,6 +189,7 @@ BIN =\
 	uudecode\
 	uuencode\
 	wc\
+	wget\
 	which\
 	whoami\
 	xargs\
@@ -225,6 +226,9 @@ $(OBJ) $(BIN): $(HDR)
 
 bc: bc.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -o $@ bc.c $(LIB)
+
+wget: wget.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -o $@ wget.c $(LIB) -lbearssl
 
 $(MAKEOBJ): make/make.h
 

@@ -1,0 +1,33 @@
+.Dd August 21, 2026
+.Dt WGET 1
+.Os sbase
+.Sh NAME
+.Nm wget
+.Nd fetch a file over http or https
+.Sh SYNOPSIS
+.Nm
+.Op Fl C Ar cacert
+.Op Fl O Ar file
+.Ar url
+.Sh DESCRIPTION
+.Nm
+requests
+.Ar url ,
+which must use the http or https scheme, and writes the response body
+to standard output.
+.Sh OPTIONS
+.Bl -tag -width Ds
+.It Fl C Ar cacert
+Use the PEM bundle
+.Ar cacert
+to validate the server certificate instead of the default
+.Pa /etc/ssl/cert.pem .
+.It Fl O Ar file
+Write the body to
+.Ar file
+instead of standard output.
+.El
+.Sh EXIT STATUS
+.Nm
+exits 0 if the server answered with a 2xx status and the body was
+written completely, 1 otherwise.
