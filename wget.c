@@ -282,6 +282,14 @@ rs_fill(struct rstream *rs)
 }
 
 static int
+rs_getchar(struct rstream *rs)
+{
+	if (rs->pos >= rs->len && rs_fill(rs) < 0)
+		return -1;
+	return rs->buf[rs->pos++];
+}
+
+static int
 rs_getline(struct rstream *rs, char *line, size_t size)
 {
 	size_t i = 0;
