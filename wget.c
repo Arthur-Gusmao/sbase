@@ -237,24 +237,36 @@ load_anchors(const char *fname)
 		eprintf("fopen %s:", fname);
 	br_pem_decoder_init(&pc);
 	while ((n = fread(filebuf, 1, sizeof(filebuf), f)) > 0) {
-		br_pem_decoder_push(&pc, filebuf, n);
-		for (;;) {
-			switch (br_pem_decoder_event(&pc)) {
-			case BR_PEM_BEGIN_OBJ:
-				der.len = 0;
-				br_pem_decoder_setdest(&pc, bufappend, &der);
-				inobj = 1;
-				break;
-			case BR_PEM_END_OBJ:
-				if (inobj && !strcmp(br_pem_decoder_name(&pc),
-				                     "CERTIFICATE"))
-					add_ta(der.data, der.len);
-				inobj = 0;
-				break;
-			case BR_PEM_ERROR:
-				eprintf("%s: invalid PEM\n", fname);
-			default:
-				goto chunk;
+		unsigned char *p = filebuf;
+		size_t left = n;
+
+		while (left > 0) {
+			size_t t;
+
+			t = br_pem_decoder_push(&pc, p, left);
+			p += t;
+			left -= t;
+			for (;;) {
+				switch (br_pem_decoder_event(&pc)) {
+				case BR_PEM_BEGIN_OBJ:
+					der.len = 0;
+					br_pem_decoder_setdest(&pc,
+					                       bufappend,
+					                       &der);
+					inobj = 1;
+					break;
+				case BR_PEM_END_OBJ:
+					if (inobj &&
+					    !strcmp(br_pem_decoder_name(&pc),
+					            "CERTIFICATE"))
+						add_ta(der.data, der.len);
+					inobj = 0;
+					break;
+				case BR_PEM_ERROR:
+					eprintf("%s: invalid PEM\n", fname);
+				default:
+					goto chunk;
+				}
 			}
 		}
 chunk:		;
