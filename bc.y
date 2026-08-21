@@ -33,6 +33,7 @@ struct macro {
 
 static int yyerror(char *);
 static int yylex(void);
+int yyparse(void);
 
 static void quit(void);
 static char *code(char *, ...);
